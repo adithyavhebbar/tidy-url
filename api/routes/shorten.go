@@ -68,7 +68,7 @@ func ShortenURL(c *fiber.Ctx) error {
 
 	var id string
 
-	if body.URL == "" {
+	if body.CustomShort == "" {
 		id = uuid.New().String()[:6]
 	} else {
 		id = body.CustomShort
@@ -88,7 +88,9 @@ func ShortenURL(c *fiber.Ctx) error {
 		body.Expiry = 24
 	}
 
-	_, err = r.Set(database.Ctx, id, body.URL, time.Duration(body.Expiry)).Result()
+	result, err := r.Set(database.Ctx, id, body.URL, time.Duration(body.Expiry)*30*60*time.Second).Result()
+
+	fmt.Println(result)
 
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Cannot get shorten URL"})

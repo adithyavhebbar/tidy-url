@@ -7,9 +7,11 @@ import (
 )
 
 func ResolveURL(c *fiber.Ctx) error {
-	url := c.Params("url")
+	que := c.Context().QueryArgs()
 
-	r := database.CreateClient(0)
+	url := string(que.Peek("url"))
+
+	r := database.CreateClient(1)
 
 	defer r.Close()
 
@@ -27,4 +29,8 @@ func ResolveURL(c *fiber.Ctx) error {
 	_ = rInr.Incr(database.Ctx, "counter")
 
 	return c.Redirect(longUrl, 301)
+}
+
+func TestServer(c *fiber.Ctx) error {
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{"health": "OK"})
 }

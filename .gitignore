@@ -7,6 +7,9 @@
 *.so
 *.dylib
 
+data
+.data
+.vscode
 # Test binary, built with `go test -c`
 *.test
 
