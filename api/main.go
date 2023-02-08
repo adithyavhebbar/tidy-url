@@ -25,11 +25,12 @@ func main() {
 	app.Use(logger.New())
 
 	setUpRoutes(app)
-
-	log.Fatal(app.Listen(os.Getenv("APP_PORT")))
+	port := os.Getenv("APP_PORT")
+	log.Fatal(app.Listen(port))
 }
 
 func setUpRoutes(app *fiber.App) {
-	app.Get("/:url", routes.ResolveURL)
+	app.Get("/v1/url/", routes.ResolveURL)
 	app.Post("/api/v1", routes.ShortenURL)
+
 }
