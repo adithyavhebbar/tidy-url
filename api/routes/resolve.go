@@ -1,6 +1,8 @@
 package routes
 
 import (
+	"fmt"
+
 	"github.com/adithyavhebbar/tidy-url/database"
 	"github.com/go-redis/redis/v8"
 	"github.com/gofiber/fiber/v2"
@@ -20,6 +22,7 @@ func ResolveURL(c *fiber.Ctx) error {
 	if err == redis.Nil {
 		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{"error": "Short URL not found"})
 	} else if err != nil {
+		fmt.Println("Cannot connect to Database", err)
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Something went wrong"})
 	}
 

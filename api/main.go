@@ -32,5 +32,4 @@ func main() {
 func setUpRoutes(app *fiber.App) {
 	app.Get("/v1/url/", routes.ResolveURL)
 	app.Post("/api/v1", routes.ShortenURL)
-
 }

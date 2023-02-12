@@ -36,9 +36,11 @@ func ShortenURL(c *fiber.Ctx) error {
 	val, err := rdb.Get(database.Ctx, c.IP()).Result()
 
 	if err == redis.Nil {
+		fmt.Println("[INFO]: New IP discovered. Creating API QUOTA for IP")
 		_ = rdb.Set(database.Ctx, c.IP(), os.Getenv("API_QUOTA"), 30*60*time.Second).Err()
 	} else if err != nil {
 		fmt.Println("[ERROR]: Creating API quota for IP failed. Cannot connect to database")
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Cannot process the request"})
 	} else {
 		val, _ = rdb.Get(database.Ctx, c.IP()).Result()
 		valInt, _ := strconv.Atoi(val)
